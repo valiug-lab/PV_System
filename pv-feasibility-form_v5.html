@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar PV Feasibility Analysis Request</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 30px;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            color: #667eea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title::before {
+            content: "▶";
+            color: #764ba2;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="file"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input[type="text"].missing,
+        .form-group input[type="number"].missing,
+        .form-group select.missing,
+        .form-group textarea.missing {
+            border-color: #e74c3c !important;
+            border-width: 3px !important;
+            background: #ffebee !important;
+            animation: shake 0.5s;
+        }
+        
+        .form-group.radio-missing {
+            border: 3px solid #e74c3c !important;
+            background: #ffebee !important;
+            border-radius: 8px;
+            padding: 10px;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .missing-indicator {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 14px;
+            margin-left: 10px;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .form-group input[type="text"]:focus,
+        .form-group input[type="number"]:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .checkbox-item,
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .checkbox-item input[type="checkbox"],
+        .radio-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        .radio-item input[type="radio"]:checked + label {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .radio-item:has(input[type="radio"]:checked) {
+            border-color: #667eea !important;
+            background: #f8f9ff !important;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .radio-item:hover {
+            border-color: #667eea !important;
+            cursor: pointer;
+        }
+        
+        .inline-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .help-text {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .file-upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            background: #f8f9ff;
+            margin-bottom: 15px;
+        }
+        
+        .file-list {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .btn-primary.ready {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulseBtn {
+            0%, 100% {
+                box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            }
+            50% {
+                box-shadow: 0 5px 25px rgba(102, 126, 234, 0.8);
+            }
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            font-size: 16px;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .btn-secondary:active {
+            transform: scale(0.98);
+        }
+        
+        .output-section {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background: #f8f9ff;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+        
+        .output-section.show {
+            display: block;
+        }
+        
+        .output-title {
+            font-size: 20px;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .output-content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .copy-btn {
+            margin-top: 15px;
+            padding: 10px 30px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .copy-btn:hover {
+            background: #229954;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #27ae60;
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: none;
+            animation: slideIn 0.3s ease-out;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            display: block;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        
+        .detecting {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>☀️ Solar PV Feasibility Analysis Request</h1>
+            <p>Complete this form to generate a comprehensive analysis prompt</p>
+        </div>
+        
+        <div class="content">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            
+            <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 15px; margin-bottom: 30px; text-align: center;">
+                <p style="margin: 0; color: #856404; font-size: 14px;">
+                    ℹ️ <strong>Required Fields:</strong> All fields marked with <span style="color: #e74c3c;">*</span> must be filled before you can generate the prompt. 
+                    Progress bar shows completion status.
+                </p>
+            </div>
+            
+            <form id="feasibilityForm">
+                
+                <!-- Section 1: Documents -->
+                <div class="section">
+                    <h2 class="section-title">Required Documents & Data</h2>
+                    
+                    <div class="form-group">
+                        <label class="required">Annual Meter Readings</label>
+                        <div class="file-upload-area">
+                            <p>📄 Upload meter readings from distribution operator (PDF/Excel)</p>
+                            <input type="file" id="meterReadings" accept=".pdf,.xlsx,.xls,.csv">
+                        </div>
+                        <div class="inline-group">
+                            <input type="text" id="meterPeriod" placeholder="Period (e.g., Nov 2024 - Oct 2025)" required>
+                            <input type="number" id="annualConsumption" placeholder="Total Annual kWh" required>
+                        </div>
+                        <div class="help-text">If no file, provide at minimum the total annual consumption</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">Recent Electricity Bill</label>
+                        <div class="file-upload-area">
+                            <p>📄 Upload recent bill showing tariff breakdown</p>
+                            <input type="file" id="electricityBill" accept=".pdf">
+                        </div>
+                        <div class="inline-group">
+                            <input type="text" id="provider" placeholder="Provider (e.g., Hidroelectrica)" required>
+                            <input type="text" id="billDate" placeholder="Bill date" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Local Weather Station Data (Optional)</label>
+                        <div class="file-upload-area">
+                            <p>🌤️ Upload weather station data if available</p>
+                            <input type="file" id="weatherData" accept=".csv,.xlsx,.xls">
+                        </div>
+                        <input type="text" id="weatherStation" placeholder="Station type (e.g., Ecowitt, Netatmo)">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">PV System Installation Offers</label>
+                        <div class="file-upload-area">
+                            <p>📋 Upload installer quotations (at least 1, recommended 3)</p>
+                            <input type="file" id="offers" multiple accept=".pdf">
+                        </div>
+                        <textarea id="offerDetails" placeholder="Summarize key details from offers (system size, cost, equipment brands)" required></textarea>
+                    </div>
+                </div>
+                
+                <!-- Section 2: Location -->
+                <div class="section">
+                    <h2 class="section-title">Location & Property</h2>
+                    
+                    <div class="inline-group">
+                        <div class="form-group">
+                            <label class="required">City</label>
+                            <input type="text" id="city" placeholder="e.g., Timișoara (or nearest major city)" required>
+                            <div class="help-text">💡 For small towns/villages, use the nearest major city (solar data is similar within 50km)</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="required">County/Region</label>
+                            <input type="text" id="county" placeholder="e.g., Timiș" required>
+                        </div>
+                    </div>
+                    
+                    <div class="inline-group">
+                        <div class="form-group">
+                            <label>Latitude <span id="latStatus" style="font-size: 12px;"></span></label>
+                            <input type="text" id="latitude" placeholder="Auto-detected..." readonly style="background: #f5f5f5;">
+                        </div>
+                        <div class="form-group">
+                            <label>Longitude <span id="lngStatus" style="font-size: 12px;"></span></label>
+                            <input type="text" id="longitude" placeholder="Auto-detected..." readonly style="background: #f5f5f5;">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
+                        <button type="button" class="btn btn-secondary" onclick="detectCoordinates()" style="padding: 10px 25px; font-size: 14px; background: linear-gradient(135deg, #52c234 0%, #43a047 100%); color: white; border: none;">
+                            🌍 Detect Coordinates
+                        </button>
+                        <a href="#" onclick="enableManualCoordinates(event)" style="font-size: 13px; color: #667eea; text-decoration: none;">
+                            ✏️ Enter manually
+                        </a>
+                    </div>
+                    <div class="help-text">
+                        • Auto-detects 1 second after typing (or click button above)<br>
+                        • Uses online geocoding + built-in database of 50+ Romanian cities<br>
+                        • <strong>💡 Tip:</strong> If your small town isn't found, use the nearest major city or county capital instead<br>
+                        • Examples: Village near Deva → use "Deva" | Village near Lugoj → use "Timișoara"<br>
+                        • If detection fails, you can enter coordinates manually
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">Roof Orientation</label>
+                        <select id="roofOrientation" required>
+                            <option value="">Select...</option>
+                            <option value="South">South (optimal)</option>
+                            <option value="South-East">South-East</option>
+                            <option value="South-West">South-West</option>
+                            <option value="East-West">East-West</option>
+                            <option value="East">East</option>
+                            <option value="West">West</option>
+                            <option value="North">North</option>
+                        </select>
+                    </div>
+                    
+                    <div class="inline-group">
+                        <div class="form-group">
+                            <label>Roof Tilt (degrees)</label>
+                            <input type="number" id="roofTilt" placeholder="30-35° typical">
+                        </div>
+                        <div class="form-group">
+                            <label>Available Roof Area (m²)</label>
+                            <input type="number" id="roofArea" placeholder="Approximate">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Shading Obstacles</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="shadingNone" value="None">
+                                <label for="shadingNone">None</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="shadingTrees" value="Trees">
+                                <label for="shadingTrees">Trees</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="shadingBuildings" value="Buildings">
+                                <label for="shadingBuildings">Buildings</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="shadingChimneys" value="Chimneys">
+                                <label for="shadingChimneys">Chimneys</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">Grid Connection Type</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="gridSingle" name="gridType" value="Single-phase" required>
+                                <label for="gridSingle">Single-phase</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="gridThree" name="gridType" value="Three-phase" required>
+                                <label for="gridThree">Three-phase</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section 3: Home Automation -->
+                <div class="section">
+                    <h2 class="section-title">Smart Home & Automation Status</h2>
+                    
+                    <div class="form-group">
+                        <label class="required">Home Assistant Status</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="haInstalled" name="haStatus" value="Installed and operational" required>
+                                <label for="haInstalled">Installed and operational</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="haPlanned" name="haStatus" value="Planned" required>
+                                <label for="haPlanned">Planned</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="haNo" name="haStatus" value="Not installed" required>
+                                <label for="haNo">Not installed</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="inline-group">
+                        <div class="form-group">
+                            <label>HA Version</label>
+                            <input type="text" id="haVersion" placeholder="e.g., 2024.11.1">
+                        </div>
+                        <div class="form-group">
+                            <label>HA Hardware</label>
+                            <select id="haHardware">
+                                <option value="">Select...</option>
+                                <option value="Raspberry Pi 4">Raspberry Pi 4</option>
+                                <option value="Raspberry Pi 5">Raspberry Pi 5</option>
+                                <option value="HA Green">Home Assistant Green</option>
+                                <option value="HA Yellow">Home Assistant Yellow</option>
+                                <option value="NUC/Mini PC">NUC/Mini PC</option>
+                                <option value="ODROID">ODROID</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Experience Level</label>
+                        <select id="haExperience">
+                            <option value="">Select...</option>
+                            <option value="Advanced (YAML)">Advanced (YAML configuration)</option>
+                            <option value="Intermediate">Intermediate (UI + some YAML)</option>
+                            <option value="Beginner">Beginner (UI only)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Shelly Devices</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="shelly1pm" value="Shelly 1 PM">
+                                <label for="shelly1pm">Shelly 1 PM</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="shelly3em" value="Shelly 3EM">
+                                <label for="shelly3em">Shelly 3EM</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="shellyem" value="Shelly EM">
+                                <label for="shellyem">Shelly EM</label>
+                            </div>
+                        </div>
+                        <textarea id="shellyDetails" placeholder="Describe Shelly device locations, HA integration status, control capability" rows="3"></textarea>
+                    </div>
+                </div>
+                
+                <!-- Section 4: HVAC -->
+                <div class="section">
+                    <h2 class="section-title">Heating & Cooling Equipment</h2>
+                    
+                    <div class="form-group">
+                        <label class="required">Primary AC/Heat Pump</label>
+                        <div class="inline-group">
+                            <input type="text" id="acBrand" placeholder="Brand & Model (e.g., Gree 18000 BTU)" required>
+                            <input type="text" id="acCapacity" placeholder="Capacity (BTU or kW)">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>AC Functions</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="acCooling" value="Cooling">
+                                <label for="acCooling">Cooling</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="acHeating" value="Heating">
+                                <label for="acHeating">Heating</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">AC Smart Integration</label>
+                        <select id="acIntegration" required>
+                            <option value="">Select...</option>
+                            <option value="Native HA (fully integrated)">Native HA (fully integrated)</option>
+                            <option value="IR Remote (Broadlink)">IR Remote (Broadlink)</option>
+                            <option value="Cloud API">Cloud API</option>
+                            <option value="Not integrated">Not integrated</option>
+                            <option value="Planned">Planned</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>AC Control Capability</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="acControlFull" name="acControl" value="Full (temp, mode, fan)">
+                                <label for="acControlFull">Full (temperature, mode, fan speed)</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="acControlPartial" name="acControl" value="Partial (ON/OFF only)">
+                                <label for="acControlPartial">Partial (ON/OFF only)</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="acControlNone" name="acControl" value="None">
+                                <label for="acControlNone">None</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Estimated AC Annual Consumption</label>
+                        <input type="number" id="acConsumption" placeholder="kWh/year (if known)">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">Primary Heating System</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="heatingGasRadiators" name="heatingSystem" value="Gas boiler + radiators" required>
+                                <label for="heatingGasRadiators">Gas boiler + radiators</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="heatingGasUnderfloor" name="heatingSystem" value="Gas boiler + underfloor heating" required>
+                                <label for="heatingGasUnderfloor">Gas boiler + underfloor heating</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="heatingElectricUnderfloor" name="heatingSystem" value="Electric underfloor heating" required>
+                                <label for="heatingElectricUnderfloor">Electric underfloor heating</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="heatingHeatPump" name="heatingSystem" value="Heat pump" required>
+                                <label for="heatingHeatPump">Heat pump (air-to-water, ground source)</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="heatingElectricHeaters" name="heatingSystem" value="Electric heaters" required>
+                                <label for="heatingElectricHeaters">Electric heaters (panel, oil-filled radiators)</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="heatingWoodPellet" name="heatingSystem" value="Wood/pellet stove" required>
+                                <label for="heatingWoodPellet">Wood/pellet stove</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="heatingAC" name="heatingSystem" value="AC only (no separate heating)" required>
+                                <label for="heatingAC">AC only (no separate heating system)</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="heatingNone" name="heatingSystem" value="No heating system" required>
+                                <label for="heatingNone">No heating system</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="heatingOther" name="heatingSystem" value="Other" required>
+                                <label for="heatingOther">Other (specify below)</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Heating System Details</label>
+                        <textarea id="heatingDetails" placeholder="Additional details: boiler model, smart thermostat, zones, estimated annual consumption (kWh or m³ gas), etc." rows="3"></textarea>
+                        <div class="help-text">If gas heating, provide approximate annual gas consumption in m³ if available</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Hot Water System</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="hotWaterIntegrated" name="hotWater" value="Integrated with heating">
+                                <label for="hotWaterIntegrated">Integrated with heating system</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="hotWaterElectric" name="hotWater" value="Electric boiler">
+                                <label for="hotWaterElectric">Electric boiler/water heater</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="hotWaterGas" name="hotWater" value="Gas water heater">
+                                <label for="hotWaterGas">Gas water heater (instant/tankless)</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="hotWaterHeatPump" name="hotWater" value="Heat pump water heater">
+                                <label for="hotWaterHeatPump">Heat pump water heater</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="hotWaterSolar" name="hotWater" value="Solar water heater">
+                                <label for="hotWaterSolar">Solar water heater</label>
+                            </div>
+                        </div>
+                        <div class="inline-group" style="margin-top: 10px;">
+                            <input type="number" id="hotWaterCapacity" placeholder="Capacity (liters, if electric)">
+                            <input type="number" id="hotWaterPower" placeholder="Power (kW, if electric)">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Heating/Hot Water Smart Control</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="smartThermostat" value="Smart thermostat">
+                                <label for="smartThermostat">Smart thermostat (Nest, Netatmo, tado°, etc.)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="smartTRVs" value="Smart TRVs">
+                                <label for="smartTRVs">Smart radiator valves (TRVs)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="smartBoiler" value="Smart boiler control">
+                                <label for="smartBoiler">Smart boiler control/relay</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="smartHeaterPlugs" value="Smart plugs on heaters">
+                                <label for="smartHeaterPlugs">Smart plugs on electric heaters</label>
+                            </div>
+                        </div>
+                        <input type="text" id="smartHeatingDetails" placeholder="Specify brands/models and HA integration status" style="margin-top: 10px;">
+                    </div>
+                </div>
+                
+                <!-- Section 5: EV -->
+                <div class="section">
+                    <h2 class="section-title">Electric Vehicle Information</h2>
+                    
+                    <div class="form-group">
+                        <label class="required">EV Ownership Status</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="evOwn" name="evStatus" value="Own EV" required>
+                                <label for="evOwn">Own EV</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="evPlanning" name="evStatus" value="Planning to buy" required>
+                                <label for="evPlanning">Planning to buy</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="evNo" name="evStatus" value="No EV plans" required>
+                                <label for="evNo">No EV plans</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="evDetails" style="display:none;">
+                        <div class="inline-group">
+                            <div class="form-group">
+                                <label>Make & Model</label>
+                                <input type="text" id="evModel" placeholder="e.g., Dacia Spring">
+                            </div>
+                            <div class="form-group">
+                                <label>Battery Capacity (kWh)</label>
+                                <input type="number" id="evBattery" placeholder="e.g., 26.8">
+                            </div>
+                        </div>
+                        
+                        <div class="inline-group">
+                            <div class="form-group">
+                                <label>Daily Mileage (km)</label>
+                                <input type="number" id="evDailyKm" placeholder="Average km/day">
+                            </div>
+                            <div class="form-group">
+                                <label>Annual Mileage (km)</label>
+                                <input type="number" id="evAnnualKm" placeholder="Total km/year">
+                            </div>
+                        </div>
+                        
+                        <div class="inline-group">
+                            <div class="form-group">
+                                <label>% Charged at Home</label>
+                                <input type="number" id="evHomePercent" placeholder="e.g., 44" min="0" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label>Home Charging (kWh/year)</label>
+                                <input type="number" id="evHomeKwh" placeholder="If measured">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Home Charging Setup</label>
+                            <textarea id="evCharging" placeholder="Describe charger type, power (kW), smart device integration" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section 6: Consumption -->
+                <div class="section">
+                    <h2 class="section-title">Household Consumption</h2>
+                    
+                    <div class="inline-group">
+                        <div class="form-group">
+                            <label>Number of Occupants</label>
+                            <input type="number" id="occupants" placeholder="People">
+                        </div>
+                        <div class="form-group">
+                            <label>Occupancy Pattern</label>
+                            <select id="occupancyPattern">
+                                <option value="">Select...</option>
+                                <option value="Home all day">Home all day</option>
+                                <option value="Away during work">Away during work hours</option>
+                                <option value="Variable">Variable</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Consumption Breakdown (if known)</label>
+                        <div class="inline-group">
+                            <input type="number" id="baseConsumption" placeholder="Base household (kWh/year)">
+                            <input type="number" id="heatingConsumption" placeholder="Heating/Cooling (kWh/year)">
+                            <input type="number" id="hotWaterConsumption" placeholder="Hot water (kWh/year)">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Major Appliances</label>
+                        <textarea id="appliances" placeholder="List major loads: cooking (electric/gas), washer, dryer, dishwasher, pool pump, etc." rows="3"></textarea>
+                    </div>
+                </div>
+                
+                <!-- Section 7: Goals -->
+                <div class="section">
+                    <h2 class="section-title">Analysis Level & Project Goals</h2>
+                    
+                    <div class="form-group">
+                        <label class="required">Desired Analysis Level</label>
+                        <div style="background: #f8f9ff; border: 2px solid #667eea; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                            <p style="margin: 0 0 10px 0; color: #667eea; font-weight: 600; font-size: 14px;">
+                                📊 Choose the depth of analysis that matches your needs:
+                            </p>
+                        </div>
+                        <div class="radio-group">
+                            <div class="radio-item" style="border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px; background: white;">
+                                <input type="radio" id="levelQuick" name="analysisLevel" value="Quick Overview (Free)" required>
+                                <label for="levelQuick" style="margin-bottom: 0;">
+                                    <strong style="color: #27ae60; font-size: 16px;">⚡ Quick Overview (Free)</strong> - 3-5 pages
+                                    <div style="font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5;">
+                                        ✓ Basic system sizing recommendation<br>
+                                        ✓ Rough cost estimate and payback<br>
+                                        ✓ Go/No-Go decision support<br>
+                                        <em style="color: #27ae60;">Perfect for initial feasibility check</em>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="radio-item" style="border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px; background: white;">
+                                <input type="radio" id="levelHighLevel" name="analysisLevel" value="High-Level Analysis" required>
+                                <label for="levelHighLevel" style="margin-bottom: 0;">
+                                    <strong style="color: #667eea; font-size: 16px;">📊 High-Level Analysis</strong> - 20-25 pages
+                                    <div style="font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5;">
+                                        ✓ Detailed technical & financial feasibility<br>
+                                        ✓ Multiple system options comparison<br>
+                                        ✓ 25-year ROI projections & sensitivity analysis<br>
+                                        ✓ Smart home integration strategy<br>
+                                        ✓ Risk assessment<br>
+                                        <em style="color: #667eea;">Professional investment decision report</em>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="radio-item" style="border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px; background: white;">
+                                <input type="radio" id="levelDetailed" name="analysisLevel" value="Detailed Implementation Plan" required>
+                                <label for="levelDetailed" style="margin-bottom: 0;">
+                                    <strong style="color: #764ba2; font-size: 16px;">🚀 Detailed Implementation Plan</strong> - 40-60+ pages
+                                    <div style="font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5;">
+                                        ✓ Everything in High-Level Analysis PLUS:<br>
+                                        ✓ <strong>Complete Home Assistant YAML automation code</strong><br>
+                                        ✓ Week-by-week implementation timeline<br>
+                                        ✓ Equipment specifications & installer evaluation<br>
+                                        ✓ Troubleshooting guide & optimization strategies<br>
+                                        ✓ Maintenance schedule<br>
+                                        <em style="color: #764ba2;">Complete DIY implementation manual with ready-to-use code</em>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">Primary Objective</label>
+                        <select id="primaryGoal" required>
+                            <option value="">Select...</option>
+                            <option value="Minimize electricity bills">Minimize electricity bills</option>
+                            <option value="Energy independence">Energy independence</option>
+                            <option value="Environmental impact">Environmental impact</option>
+                            <option value="ROI">ROI / Investment return</option>
+                            <option value="Smart home integration">Smart home integration</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Battery Storage Preference</label>
+                        <select id="batteryPreference">
+                            <option value="">Select...</option>
+                            <option value="Required">Required</option>
+                            <option value="Strongly preferred">Strongly preferred</option>
+                            <option value="Nice to have">Nice to have</option>
+                            <option value="Not needed">Not needed</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>System Size Preference</label>
+                        <select id="sizePreference">
+                            <option value="">Select...</option>
+                            <option value="Cover 100%">Cover 100% consumption</option>
+                            <option value="Cover most">Cover most consumption</option>
+                            <option value="Maximize roof">Maximize roof space</option>
+                            <option value="Undecided">Undecided / need recommendation</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Budget</label>
+                        <div class="inline-group">
+                            <input type="number" id="budgetMin" placeholder="Minimum (Lei)">
+                            <input type="number" id="budgetMax" placeholder="Maximum (Lei)">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Future Plans (next 5 years)</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="planBuyEV" value="Buy EV/PHEV">
+                                <label for="planBuyEV">Buy electric vehicle or plug-in hybrid</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="planSecondEV" value="Add second EV">
+                                <label for="planSecondEV">Add second EV/PHEV</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="planHeatPump" value="Install heat pump">
+                                <label for="planHeatPump">Install heat pump</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="planAC" value="Add AC">
+                                <label for="planAC">Add another AC unit</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="planSmartThermostat" value="Add smart thermostat">
+                                <label for="planSmartThermostat">Add smart thermostat</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="planExpansion" value="Home expansion">
+                                <label for="planExpansion">Home expansion/renovation</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Smart Thermostat Preference (if planning to add)</label>
+                        <select id="smartThermostatPreference">
+                            <option value="">Not planning or already have</option>
+                            <option value="Moes (Tuya/Zigbee)">Moes (Tuya/Zigbee) - Budget friendly</option>
+                            <option value="Netatmo">Netatmo - Premium, excellent HA integration</option>
+                            <option value="tado°">tado° - Advanced geofencing</option>
+                            <option value="Nest (Google)">Nest (Google) - Popular but limited HA</option>
+                            <option value="Ecobee">Ecobee - North America focused</option>
+                            <option value="Shelly TRV">Shelly TRV - Per-radiator control</option>
+                            <option value="Sonoff (Zigbee)">Sonoff (Zigbee) - Budget friendly</option>
+                            <option value="Generic Zigbee">Generic Zigbee thermostat</option>
+                            <option value="Other">Other / Undecided</option>
+                        </select>
+                        <div class="help-text">Popular HA-compatible options. Moes and Sonoff offer good value for Romania.</div>
+                    </div>
+                </div>
+                
+                <!-- Section 8: Additional -->
+                <div class="section">
+                    <h2 class="section-title">Additional Information</h2>
+                    
+                    <div class="form-group">
+                        <label>Special Considerations</label>
+                        <textarea id="specialConsiderations" placeholder="Historic building, HOA rules, shared roof, planned sale, etc." rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Specific Questions</label>
+                        <textarea id="questions" placeholder="Any specific questions for the analysis?" rows="4"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Additional Context</label>
+                        <textarea id="additionalContext" placeholder="Any other relevant information about your situation" rows="4"></textarea>
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset Form</button>
+                    <button type="button" class="btn btn-secondary" onclick="checkFormStatus()" style="background: #3498db; color: white;">
+                        🔍 Check Status
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="generateBtn">
+                        <span id="btnText">Generate Prompt</span>
+                        <span id="btnLoader" style="display: none;">⏳ Processing...</span>
+                    </button>
+                </div>
+                
+                <div style="text-align: center; margin-top: 15px; color: #888; font-size: 13px;">
+                    💡 Tip: Click "Check Status" to see which required fields are missing
+                </div>
+            </form>
+            
+            <!-- Output Section -->
+            <div class="output-section" id="outputSection">
+                <h3 class="output-title">📋 Generated Analysis Prompt</h3>
+                <p style="margin-bottom: 15px; color: #666;">
+                    <strong>Analysis Level:</strong> <span id="selectedLevel" style="color: #667eea; font-weight: 600;"></span><br>
+                    Copy this prompt and paste it to Claude along with your uploaded files for comprehensive analysis:
+                </p>
+                <div class="output-content" id="outputContent"></div>
+                <button class="copy-btn" onclick="copyToClipboard()">📋 Copy to Clipboard</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        ✓ Prompt copied to clipboard!
+    </div>
+    
+    <script>
+        let geocodeTimeout;
+        
+        document.getElementById('city').addEventListener('input', function() {
+            clearTimeout(geocodeTimeout);
+            geocodeTimeout = setTimeout(detectCoordinates, 1000);
+        });
+        
+        document.getElementById('county').addEventListener('input', function() {
+            clearTimeout(geocodeTimeout);
+            geocodeTimeout = setTimeout(detectCoordinates, 1000);
+        });
+        
+        async function detectCoordinates() {
+            const city = document.getElementById('city').value.trim();
+            const county = document.getElementById('county').value.trim();
+            const latStatus = document.getElementById('latStatus');
+            const lngStatus = document.getElementById('lngStatus');
+            const latInput = document.getElementById('latitude');
+            const lngInput = document.getElementById('longitude');
+            
+            if (!city || !county) {
+                latStatus.textContent = '';
+                lngStatus.textContent = '';
+                return;
+            }
+            
+            latStatus.textContent = '🔄';
+            lngStatus.textContent = '🔄';
+            latStatus.style.color = '#667eea';
+            lngStatus.style.color = '#667eea';
+            latInput.classList.add('detecting');
+            lngInput.classList.add('detecting');
+            
+            try {
+                let result = null;
+                
+                try {
+                    const query = `${city}, ${county}, Romania`;
+                    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1&addressdetails=1`;
+                    
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data && data.length > 0) {
+                            result = {
+                                lat: parseFloat(data[0].lat),
+                                lon: parseFloat(data[0].lon),
+                                name: data[0].display_name
+                            };
+                        }
+                    }
+                } catch (e) {
+                    console.log('Nominatim failed, trying fallback...', e);
+                }
+                
+                if (!result) {
+                    try {
+                        const query = `${city}, ${county}, Romania`;
+                        const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=1`;
+                        
+                        const response = await fetch(url);
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.features && data.features.length > 0) {
+                                const coords = data.features[0].geometry.coordinates;
+                                result = {
+                                    lat: coords[1],
+                                    lon: coords[0],
+                                    name: data.features[0].properties.name || `${city}, ${county}`
+                                };
+                            }
+                        }
+                    } catch (e) {
+                        console.log('Photon failed, trying manual database...', e);
+                    }
+                }
+                
+                if (!result) {
+                    result = getRomanianCityCoordinates(city, county);
+                }
+                
+                if (result) {
+                    const lat = result.lat.toFixed(4);
+                    const lon = result.lon.toFixed(4);
+                    
+                    latInput.value = lat;
+                    lngInput.value = lon;
+                    latInput.classList.remove('detecting');
+                    lngInput.classList.remove('detecting');
+                    
+                    latStatus.textContent = '✓';
+                    lngStatus.textContent = '✓';
+                    latStatus.style.color = '#27ae60';
+                    lngStatus.style.color = '#27ae60';
+                    
+                    const shortName = result.name.split(',').slice(0, 2).join(',');
+                    showNotification(`✓ ${shortName} (${lat}°N, ${lon}°E)`, 'success');
+                    
+                    updateProgress();
+                } else {
+                    throw new Error('Location not found in any database');
+                }
+            } catch (error) {
+                console.error('All geocoding methods failed:', error);
+                latInput.classList.remove('detecting');
+                lngInput.classList.remove('detecting');
+                latStatus.textContent = '✏️';
+                lngStatus.textContent = '✏️';
+                latStatus.style.color = '#f39c12';
+                lngStatus.style.color = '#f39c12';
+                
+                showNotification(`⚠️ City not found. Try nearest major city (e.g., county capital) or click "Enter manually"`, 'error');
+            }
+        }
+        
+        function getRomanianCityCoordinates(city, county) {
+            const cities = {
+                'bucurești': { lat: 44.4268, lon: 26.1025, name: 'București, România' },
+                'bucharest': { lat: 44.4268, lon: 26.1025, name: 'București, România' },
+                'cluj-napoca': { lat: 46.7712, lon: 23.6236, name: 'Cluj-Napoca, Cluj' },
+                'cluj napoca': { lat: 46.7712, lon: 23.6236, name: 'Cluj-Napoca, Cluj' },
+                'timișoara': { lat: 45.7489, lon: 21.2087, name: 'Timișoara, Timiș' },
+                'timisoara': { lat: 45.7489, lon: 21.2087, name: 'Timișoara, Timiș' },
+                'iași': { lat: 47.1585, lon: 27.6014, name: 'Iași, Iași' },
+                'iasi': { lat: 47.1585, lon: 27.6014, name: 'Iași, Iași' },
+                'constanța': { lat: 44.1598, lon: 28.6348, name: 'Constanța, Constanța' },
+                'constanta': { lat: 44.1598, lon: 28.6348, name: 'Constanța, Constanța' },
+                'craiova': { lat: 44.3302, lon: 23.7949, name: 'Craiova, Dolj' },
+                'brașov': { lat: 45.6427, lon: 25.5887, name: 'Brașov, Brașov' },
+                'brasov': { lat: 45.6427, lon: 25.5887, name: 'Brașov, Brașov' },
+                'galați': { lat: 45.4353, lon: 28.0080, name: 'Galați, Galați' },
+                'galati': { lat: 45.4353, lon: 28.0080, name: 'Galați, Galați' },
+                'ploiești': { lat: 44.9392, lon: 26.0229, name: 'Ploiești, Prahova' },
+                'ploiesti': { lat: 44.9392, lon: 26.0229, name: 'Ploiești, Prahova' },
+                'brăila': { lat: 45.2692, lon: 27.9575, name: 'Brăila, Brăila' },
+                'braila': { lat: 45.2692, lon: 27.9575, name: 'Brăila, Brăila' },
+                'oradea': { lat: 47.0465, lon: 21.9189, name: 'Oradea, Bihor' },
+                'bacău': { lat: 46.5670, lon: 26.9146, name: 'Bacău, Bacău' },
+                'bacau': { lat: 46.5670, lon: 26.9146, name: 'Bacău, Bacău' },
+                'arad': { lat: 46.1865, lon: 21.3123, name: 'Arad, Arad' },
+                'pitești': { lat: 44.8565, lon: 24.8692, name: 'Pitești, Argeș' },
+                'pitesti': { lat: 44.8565, lon: 24.8692, name: 'Pitești, Argeș' },
+                'sibiu': { lat: 45.7983, lon: 24.1256, name: 'Sibiu, Sibiu' },
+                'târgu mureș': { lat: 46.5425, lon: 24.5575, name: 'Târgu Mureș, Mureș' },
+                'targu mures': { lat: 46.5425, lon: 24.5575, name: 'Târgu Mureș, Mureș' },
+                'baia mare': { lat: 47.6567, lon: 23.5676, name: 'Baia Mare, Maramureș' },
+                'buzău': { lat: 45.1500, lon: 26.8333, name: 'Buzău, Buzău' },
+                'buzau': { lat: 45.1500, lon: 26.8333, name: 'Buzău, Buzău' },
+                'botoșani': { lat: 47.7456, lon: 26.6656, name: 'Botoșani, Botoșani' },
+                'botosani': { lat: 47.7456, lon: 26.6656, name: 'Botoșani, Botoșani' },
+                'satu mare': { lat: 47.7911, lon: 22.8853, name: 'Satu Mare, Satu Mare' },
+                'deva': { lat: 45.8833, lon: 22.9000, name: 'Deva, Hunedoara' },
+            };
+            
+            const cityKey = city.toLowerCase().trim();
+            const result = cities[cityKey];
+            
+            if (result) {
+                result.source = 'local';
+                return result;
+            }
+            return null;
+        }
+        
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = type === 'success' ? '✓ ' + message : '⚠️ ' + message;
+            notification.style.background = type === 'success' ? '#27ae60' : '#e74c3c';
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 4000);
+        }
+        
+        function enableManualCoordinates(event) {
+            event.preventDefault();
+            const latInput = document.getElementById('latitude');
+            const lngInput = document.getElementById('longitude');
+            const latStatus = document.getElementById('latStatus');
+            const lngStatus = document.getElementById('lngStatus');
+            
+            latInput.removeAttribute('readonly');
+            lngInput.removeAttribute('readonly');
+            latInput.style.background = 'white';
+            lngInput.style.background = 'white';
+            latInput.placeholder = 'e.g., 45.7489';
+            lngInput.placeholder = 'e.g., 21.2087';
+            
+            latStatus.textContent = '✏️ Manual';
+            lngStatus.textContent = '✏️ Manual';
+            latStatus.style.color = '#667eea';
+            lngStatus.style.color = '#667eea';
+            
+            showNotification('Manual coordinate entry enabled. Type your coordinates.', 'success');
+        }
+        
+        document.querySelectorAll('input[name="evStatus"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const evDetails = document.getElementById('evDetails');
+                const showDetails = this.value === 'Own EV';
+                evDetails.style.display = showDetails ? 'block' : 'none';
+            });
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.radio-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (e.target.type !== 'radio' && e.target.tagName !== 'A') {
+                        const radio = this.querySelector('input[type="radio"]');
+                        if (radio) {
+                            radio.checked = true;
+                            radio.dispatchEvent(new Event('change', { bubbles: true }));
+                            updateProgress();
+                        }
+                    }
+                });
+            });
+        });
+        
+        function updateProgress() {
+            const form = document.getElementById('feasibilityForm');
+            const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+            let filled = 0;
+            let total = 0;
+            
+            const radioGroups = new Set();
+            inputs.forEach(input => {
+                if (input.type === 'radio') {
+                    radioGroups.add(input.name);
+                } else {
+                    total++;
+                    if (input.value.trim() !== '') filled++;
+                }
+            });
+            
+            radioGroups.forEach(groupName => {
+                total++;
+                if (document.querySelector(`input[name="${groupName}"]:checked`)) {
+                    filled++;
+                }
+            });
+            
+            const progress = total > 0 ? (filled / total) * 100 : 0;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            const generateBtn = document.getElementById('generateBtn');
+            if (progress === 100) {
+                generateBtn.classList.add('ready');
+            } else {
+                generateBtn.classList.remove('ready');
+            }
+        }
+        
+        document.querySelectorAll('input, select, textarea').forEach(element => {
+            element.addEventListener('change', updateProgress);
+            element.addEventListener('input', updateProgress);
+        });
+        
+        document.getElementById('feasibilityForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = document.getElementById('feasibilityForm');
+            const requiredFields = form.querySelectorAll('[required]');
+            const emptyFields = [];
+            
+            requiredFields.forEach(field => {
+                if (field.type === 'radio') {
+                    const radioGroup = form.querySelectorAll(`input[name="${field.name}"]`);
+                    const isChecked = Array.from(radioGroup).some(radio => radio.checked);
+                    if (!isChecked && !emptyFields.includes(field.name)) {
+                        emptyFields.push(field.name);
+                    }
+                } else if (!field.value.trim()) {
+                    emptyFields.push(field.id || field.name);
+                }
+            });
+            
+            if (emptyFields.length > 0) {
+                showNotification(`⚠️ Please fill all required fields (marked with *). Missing: ${emptyFields.length} field(s)`, 'error');
+                
+                const firstEmpty = form.querySelector('[required]:invalid, input[required][type="radio"]:not(:checked)');
+                if (firstEmpty) {
+                    firstEmpty.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
+            
+            generatePrompt();
+        });
+        
+        function generatePrompt() {
+            const btnText = document.getElementById('btnText');
+            const btnLoader = document.getElementById('btnLoader');
+            const generateBtn = document.getElementById('generateBtn');
+            
+            btnText.style.display = 'none';
+            btnLoader.style.display = 'inline';
+            generateBtn.disabled = true;
+            
+            try {
+                const data = {
+                annualConsumption: document.getElementById('annualConsumption').value,
+                meterPeriod: document.getElementById('meterPeriod').value,
+                provider: document.getElementById('provider').value,
+                billDate: document.getElementById('billDate').value,
+                weatherStation: document.getElementById('weatherStation').value,
+                offerDetails: document.getElementById('offerDetails').value,
+                city: document.getElementById('city').value,
+                county: document.getElementById('county').value,
+                latitude: document.getElementById('latitude').value,
+                longitude: document.getElementById('longitude').value,
+                roofOrientation: document.getElementById('roofOrientation').value,
+                roofTilt: document.getElementById('roofTilt').value,
+                roofArea: document.getElementById('roofArea').value,
+                shading: getCheckboxValues(['shadingNone', 'shadingTrees', 'shadingBuildings', 'shadingChimneys']),
+                gridType: document.querySelector('input[name="gridType"]:checked')?.value || '',
+                haStatus: document.querySelector('input[name="haStatus"]:checked')?.value || '',
+                haVersion: document.getElementById('haVersion').value,
+                haHardware: document.getElementById('haHardware').value,
+                haExperience: document.getElementById('haExperience').value,
+                shellyDevices: getCheckboxValues(['shelly1pm', 'shelly3em', 'shellyem']),
+                shellyDetails: document.getElementById('shellyDetails').value,
+                acBrand: document.getElementById('acBrand').value,
+                acCapacity: document.getElementById('acCapacity').value,
+                acFunctions: getCheckboxValues(['acCooling', 'acHeating']),
+                acIntegration: document.getElementById('acIntegration').value,
+                acControl: document.querySelector('input[name="acControl"]:checked')?.value || '',
+                acConsumption: document.getElementById('acConsumption').value,
+                heatingSystem: document.querySelector('input[name="heatingSystem"]:checked')?.value || '',
+                heatingDetails: document.getElementById('heatingDetails').value,
+                hotWater: document.querySelector('input[name="hotWater"]:checked')?.value || '',
+                hotWaterCapacity: document.getElementById('hotWaterCapacity').value,
+                hotWaterPower: document.getElementById('hotWaterPower').value,
+                smartHeating: getCheckboxValues(['smartThermostat', 'smartTRVs', 'smartBoiler', 'smartHeaterPlugs']),
+                smartHeatingDetails: document.getElementById('smartHeatingDetails').value,
+                evStatus: document.querySelector('input[name="evStatus"]:checked')?.value || '',
+                evModel: document.getElementById('evModel').value,
+                evBattery: document.getElementById('evBattery').value,
+                evDailyKm: document.getElementById('evDailyKm').value,
+                evAnnualKm: document.getElementById('evAnnualKm').value,
+                evHomePercent: document.getElementById('evHomePercent').value,
+                evHomeKwh: document.getElementById('evHomeKwh').value,
+                evCharging: document.getElementById('evCharging').value,
+                occupants: document.getElementById('occupants').value,
+                occupancyPattern: document.getElementById('occupancyPattern').value,
+                baseConsumption: document.getElementById('baseConsumption').value,
+                heatingConsumption: document.getElementById('heatingConsumption').value,
+                hotWaterConsumption: document.getElementById('hotWaterConsumption').value,
+                appliances: document.getElementById('appliances').value,
+                analysisLevel: document.querySelector('input[name="analysisLevel"]:checked')?.value || '',
+                primaryGoal: document.getElementById('primaryGoal').value,
+                batteryPreference: document.getElementById('batteryPreference').value,
+                sizePreference: document.getElementById('sizePreference').value,
+                budgetMin: document.getElementById('budgetMin').value,
+                budgetMax: document.getElementById('budgetMax').value,
+                futurePlans: getCheckboxValues(['planBuyEV', 'planSecondEV', 'planHeatPump', 'planAC', 'planSmartThermostat', 'planExpansion']),
+                smartThermostatPreference: document.getElementById('smartThermostatPreference').value,
+                specialConsiderations: document.getElementById('specialConsiderations').value,
+                questions: document.getElementById('questions').value,
+                additionalContext: document.getElementById('additionalContext').value
+            };
+            
+            const prompt = buildPrompt(data);
+            document.getElementById('outputContent').textContent = prompt;
+            
+            const levelDisplay = document.getElementById('selectedLevel');
+            if (data.analysisLevel) {
+                levelDisplay.textContent = data.analysisLevel;
+                if (data.analysisLevel.includes('Quick')) {
+                    levelDisplay.style.color = '#27ae60';
+                } else if (data.analysisLevel.includes('High-Level')) {
+                    levelDisplay.style.color = '#667eea';
+                } else if (data.analysisLevel.includes('Detailed')) {
+                    levelDisplay.style.color = '#764ba2';
+                }
+            } else {
+                levelDisplay.textContent = 'Not selected';
+                levelDisplay.style.color = '#e74c3c';
+            }
+            
+            document.getElementById('outputSection').classList.add('show');
+            document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
+            
+            showNotification('✓ Prompt generated successfully! Scroll down to copy.', 'success');
+            
+            } catch (error) {
+                console.error('Error generating prompt:', error);
+                showNotification('⚠️ Error generating prompt. Please check all fields and try again.', 'error');
+            } finally {
+                btnText.style.display = 'inline';
+                btnLoader.style.display = 'none';
+                generateBtn.disabled = false;
+            }
+        }
+        
+        function getCheckboxValues(ids) {
+            return ids
+                .filter(id => document.getElementById(id)?.checked)
+                .map(id => document.getElementById(id).value)
+                .join(', ');
+        }
+        
+        function buildPrompt(data) {
+            return `# SOLAR PV FEASIBILITY ANALYSIS REQUEST - TEST MODE
+
+Analysis Level: ${data.analysisLevel}
+Annual Consumption: ${data.annualConsumption} kWh
+Location: ${data.city}, ${data.county}
+Coordinates: ${data.latitude}, ${data.longitude}
+Primary AC: ${data.acBrand}
+Heating: ${data.heatingSystem}
+EV Status: ${data.evStatus}
+
+[Full prompt would be generated here with all details]`;
+        }
+        
+        function copyToClipboard() {
+            const text = document.getElementById('outputContent').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('Prompt copied to clipboard!');
+            }).catch(() => {
+                showNotification('Failed to copy. Please copy manually.', 'error');
+            });
+        }
+        
+        function resetForm() {
+            if (confirm('Are you sure you want to reset the form? All entered data will be lost.')) {
+                document.getElementById('feasibilityForm').reset();
+                document.getElementById('outputSection').classList.remove('show');
+                document.getElementById('evDetails').style.display = 'none';
+                updateProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
+        function checkFormStatus() {
+            const form = document.getElementById('feasibilityForm');
+            const requiredFields = form.querySelectorAll('[required]');
+            const fieldLabels = [];
+            
+            requiredFields.forEach(field => {
+                let isEmpty = false;
+                let label = '';
+                
+                if (field.type === 'radio') {
+                    const radioGroup = form.querySelectorAll(`input[name="${field.name}"]`);
+                    const isChecked = Array.from(radioGroup).some(radio => radio.checked);
+                    if (!isChecked) {
+                        isEmpty = true;
+                        const parentGroup = field.closest('.form-group');
+                        if (parentGroup) {
+                            const labelElement = parentGroup.querySelector('label.required, label');
+                            label = labelElement ? labelElement.textContent.replace('*', '').trim() : field.name;
+                        }
+                    }
+                } else if (!field.value.trim()) {
+                    isEmpty = true;
+                    const labelElement = field.closest('.form-group')?.querySelector('label');
+                    label = labelElement ? labelElement.textContent.replace('*', '').trim() : field.id;
+                }
+                
+                if (isEmpty && !fieldLabels.includes(label)) {
+                    fieldLabels.push(label);
+                }
+            });
+            
+            if (fieldLabels.length === 0) {
+                showNotification('✓ All required fields are filled! Click "Generate Prompt" to continue.', 'success');
+            } else {
+                const missingList = fieldLabels.slice(0, 5).join('\n• ');
+                const moreText = fieldLabels.length > 5 ? `\n• ... and ${fieldLabels.length - 5} more` : '';
+                alert(`⚠️ Missing ${fieldLabels.length} required field(s):\n\n• ${missingList}${moreText}\n\nPlease scroll through the form and fill all fields marked with *`);
+            }
+        }
+        
+        updateProgress();
+        
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('feasibilityForm').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+            }
+        });
+        
+        console.log('✓ PV Feasibility Form loaded successfully');
+    </script>
+</body>
+</html>
